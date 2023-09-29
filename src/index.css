@@ -14,7 +14,22 @@ code {
 
 .conteiner {
   display: flex;
-  /* flex-direction: column; */
+  flex-direction: column;
   justify-content: center;
   gap: 30px;
+  max-width: 300px;
+}
+
+.btn-active {
+  background-color: aquamarine;
+}
+
+.task-done {
+  opacity: 0.5;
+}
+
+.task {
+  display: flex;
+  padding: 0;
+  margin: 0;
 }
