@@ -9,55 +9,80 @@ type PropsType = {
   changeFilter: (value: FilterValues) => void;
   filter: FilterValues;
   addTask: (title: string) => void;
+  changeStatus: (id: string) => void;
 };
 
 function ToDoList(props: PropsType) {
   const [taskTitle, setTaskTitle] = useState("");
+  const [error, setError] = useState("");
+
   function submitTaskTitle() {
-    props.addTask(taskTitle);
-    setTaskTitle("");
+    if (
+      taskTitle &&
+      taskTitle.trim().length !== 0 &&
+      taskTitle.trim().length < 5
+    ) {
+      const trimedTitle = taskTitle.trim();
+      setError("");
+      props.addTask(trimedTitle);
+      props.changeFilter("active");
+      setTaskTitle("");
+    } else if (taskTitle.trim().length === 0) {
+      setError("пустое поле");
+    } else if (taskTitle.trim().length > 5) {
+      setError("больше 5");
+    }
   }
 
   return (
-    <>
-      <h2>{props.title}</h2>
+    <div className="conteiner">
+      <h2 className="title">{props.title}</h2>
 
-      <div>
+      <div className="input">
         <input
           type="text"
           onChange={(e) => setTaskTitle(e.target.value)}
           value={taskTitle}
+          // onKeyDown={(e) => console.log(e.key)}
+          onKeyDown={(e) => (e.key === "Enter" ? submitTaskTitle() : null)}
         />
         <button onClick={() => submitTaskTitle()}>ADD</button>
       </div>
-      {props.tasks.map((t) => (
-        <ul>
-          <li className="task">
-            <input type="checkbox" checked={t.checked} />
-            <p>{t.value}</p>
+      {error && <div className="error">{error}</div>}
+      <ul className="tasks-list">
+        {props.tasks.map((t) => (
+          <li className="task" key={t.id}>
+            <input
+              type="checkbox"
+              checked={t.checked}
+              onClick={() => props.changeStatus(t.id)}
+            />
+            <p className={t.checked === true ? "task-done" : ""}>{t.value}</p>
             <button onClick={() => props.removeTask(t.id)}>delete</button>
           </li>
-        </ul>
-      ))}
-      <button
-        onClick={() => props.changeFilter("all")}
-        className={props.filter === "all" ? "btn-active" : ""}
-      >
-        All
-      </button>
-      <button
-        onClick={() => props.changeFilter("active")}
-        className={props.filter === "active" ? "btn-active" : ""}
-      >
-        Active
-      </button>
-      <button
-        onClick={() => props.changeFilter("completed")}
-        className={props.filter === "completed" ? "btn-active" : ""}
-      >
-        Completed
-      </button>
-    </>
+        ))}
+      </ul>
+      <div className="btn-group">
+        <button
+          onClick={() => props.changeFilter("all")}
+          className={props.filter === "all" ? "btn-active" : ""}
+        >
+          All
+        </button>
+        <button
+          onClick={() => props.changeFilter("active")}
+          className={props.filter === "active" ? "btn-active" : ""}
+        >
+          Active
+        </button>
+        <button
+          onClick={() => props.changeFilter("completed")}
+          className={props.filter === "completed" ? "btn-active" : ""}
+        >
+          Completed
+        </button>
+      </div>
+    </div>
   );
 }
 

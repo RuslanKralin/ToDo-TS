@@ -45,8 +45,14 @@ function App() {
     };
     tasksForToDoList = [newTask, ...tasks];
     setTasks(tasksForToDoList);
+  }
 
-    console.log(title);
+  function changeStatus(taskId: string) {
+    let resultTask = tasks.find((t) => t.id === taskId);
+    if (resultTask) {
+      resultTask.checked = !resultTask.checked;
+    }
+    setTasks([...tasks]);
   }
 
   return (
@@ -58,6 +64,7 @@ function App() {
         changeFilter={changeFilter}
         filter={filter}
         addTask={addTask}
+        changeStatus={changeStatus}
       />
     </>
   );
