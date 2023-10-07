@@ -3,11 +3,12 @@ import { FilterValues, TaskType } from "./App";
 import "./index.css";
 
 type PropsType = {
+  id: string;
   title: string;
   tasks: Array<TaskType>;
-  removeTask: (id: string) => void;
-  changeFilter: (value: FilterValues) => void;
-  filter: FilterValues;
+  removeTask: (id: string, listId: string) => void;
+  changeFilter: (value: FilterValues, listId: string) => void;
+  filterValue: FilterValues;
   addTask: (title: string) => void;
   changeStatus: (id: string) => void;
 };
@@ -20,17 +21,17 @@ function ToDoList(props: PropsType) {
     if (
       taskTitle &&
       taskTitle.trim().length !== 0 &&
-      taskTitle.trim().length < 5
+      taskTitle.trim().length < 10
     ) {
       const trimedTitle = taskTitle.trim();
       setError("");
       props.addTask(trimedTitle);
-      props.changeFilter("active");
+      // props.changeFilter("active");
       setTaskTitle("");
     } else if (taskTitle.trim().length === 0) {
       setError("пустое поле");
     } else if (taskTitle.trim().length > 5) {
-      setError("больше 5");
+      setError("больше 10");
     }
   }
 
@@ -58,26 +59,28 @@ function ToDoList(props: PropsType) {
               onClick={() => props.changeStatus(t.id)}
             />
             <p className={t.checked === true ? "task-done" : ""}>{t.value}</p>
-            <button onClick={() => props.removeTask(t.id)}>delete</button>
+            <button onClick={() => props.removeTask(t.id, props.id)}>
+              delete
+            </button>
           </li>
         ))}
       </ul>
       <div className="btn-group">
         <button
-          onClick={() => props.changeFilter("all")}
-          className={props.filter === "all" ? "btn-active" : ""}
+          onClick={() => props.changeFilter("all", props.id)}
+          className={props.filterValue === "all" ? "btn-active" : ""}
         >
           All
         </button>
         <button
-          onClick={() => props.changeFilter("active")}
-          className={props.filter === "active" ? "btn-active" : ""}
+          onClick={() => props.changeFilter("active", props.id)}
+          className={props.filterValue === "active" ? "btn-active" : ""}
         >
           Active
         </button>
         <button
-          onClick={() => props.changeFilter("completed")}
-          className={props.filter === "completed" ? "btn-active" : ""}
+          onClick={() => props.changeFilter("completed", props.id)}
+          className={props.filterValue === "completed" ? "btn-active" : ""}
         >
           Completed
         </button>
