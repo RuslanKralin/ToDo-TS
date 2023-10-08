@@ -15,24 +15,52 @@ type toDoList = {
 export type FilterValues = "all" | "active" | "completed";
 
 function App() {
-  const [tasks, setTasks] = useState([
-    { id: v1(), value: "CSS", checked: true },
-    { id: v1(), value: "JS", checked: true },
-    { id: v1(), value: "REACT", checked: false },
-    { id: v1(), value: "NODE JS", checked: false },
+  let todoListId1 = v1();
+  let todoListId2 = v1();
+  const [toDoLists, setToDoLists] = useState<Array<toDoList>>([
+    {
+      id: todoListId1,
+      title: "What to learn",
+      filterValue: "active",
+    },
+    {
+      id: todoListId2,
+      title: "What to read",
+      filterValue: "all",
+    },
   ]);
+
+  let [tasksObj, setTasks] = useState({
+    [todoListId1]: [
+      { id: v1(), value: "CSS", checked: true },
+      { id: v1(), value: "JS", checked: true },
+      { id: v1(), value: "REACT", checked: false },
+      { id: v1(), value: "NODE JS", checked: false },
+    ],
+    [todoListId2]: [
+      { id: v1(), value: "Book", checked: true },
+      { id: v1(), value: "Milk", checked: true },
+    ],
+  });
+  // const [tasks, setTasks] = useState([
+  //   { id: v1(), value: "CSS", checked: true },
+  //   { id: v1(), value: "JS", checked: true },
+  //   { id: v1(), value: "REACT", checked: false },
+  //   { id: v1(), value: "NODE JS", checked: false },
+  // ]);
 
   // const [filter, setFilter] = useState<FilterValues>("all");
 
   function removeTask(id: string, listId: string) {
-    let list = toDoLists.find((tl) => tl.id === listId);
-    if (list) {
-      // console.log(list);
-      let filteredTasks = tasks.filter((t) => t.id !== id);
-
-      // setTasks(filteredTasks);
-      setToDoLists([...toDoLists]);
-    }
+    let tasks = tasksObj[listId];
+    // let list = toDoLists.find((tl) => tl.id === listId);
+    // if (list) {
+    // console.log(list);
+    let filteredTasks = tasks.filter((t) => t.id !== id);
+    tasksObj[listId] = filteredTasks;
+    setTasks({ ...tasksObj });
+    // setToDoLists([...toDoLists]);
+    // }
   }
 
   function changeFilter(value: FilterValues, listId: string) {
@@ -42,53 +70,42 @@ function App() {
       setToDoLists([...toDoLists]);
     }
   }
-  let tasksForToDoList = tasks;
-  function addTask(title: string) {
+  // let tasksForToDoList = tasksObj[listId];
+  function addTask(title: string, listId: string) {
     let newTask = {
       id: v1(),
       value: title,
       checked: false,
     };
-    tasksForToDoList = [newTask, ...tasks];
-    setTasks(tasksForToDoList);
+    let tasks = tasksObj[listId];
+    let newTasks = [newTask, ...tasks];
+    tasksObj[listId] = newTasks;
+    setTasks({ ...tasksObj });
   }
 
-  function changeStatus(taskId: string) {
-    let resultTask = tasks.find((t) => t.id === taskId);
+  function changeStatus(taskId: string, listId: string) {
+    let tasks = tasksObj[listId];
+    let resultTask = tasks.find((t: any) => t.id === taskId);
     if (resultTask) {
       resultTask.checked = !resultTask.checked;
     }
-    setTasks([...tasks]);
+    setTasks({ ...tasksObj });
   }
-
-  const [toDoLists, setToDoLists] = useState<Array<toDoList>>([
-    {
-      id: v1(),
-      title: "What to learn",
-      filterValue: "active",
-    },
-    {
-      id: v1(),
-      title: "What to read",
-      filterValue: "all",
-    },
-    {
-      id: v1(),
-      title: "What to whach",
-      filterValue: "completed",
-    },
-  ]);
 
   return (
     <div className="conteiner">
       {toDoLists.map((tl) => {
-        let tasksForToDoList = tasks;
+        let tasksForToDoList = tasksObj[tl.id];
         if (tl.filterValue === "active") {
-          tasksForToDoList = tasks.filter((t) => t.checked === false);
+          tasksForToDoList = tasksForToDoList.filter(
+            (t: any) => t.checked === false
+          );
         }
 
         if (tl.filterValue === "completed") {
-          tasksForToDoList = tasks.filter((t) => t.checked === true);
+          tasksForToDoList = tasksForToDoList.filter(
+            (t: any) => t.checked === true
+          );
         }
 
         return (

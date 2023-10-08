@@ -9,8 +9,8 @@ type PropsType = {
   removeTask: (id: string, listId: string) => void;
   changeFilter: (value: FilterValues, listId: string) => void;
   filterValue: FilterValues;
-  addTask: (title: string) => void;
-  changeStatus: (id: string) => void;
+  addTask: (title: string, listId: string) => void;
+  changeStatus: (id: string, listId: string) => void;
 };
 
 function ToDoList(props: PropsType) {
@@ -25,7 +25,7 @@ function ToDoList(props: PropsType) {
     ) {
       const trimedTitle = taskTitle.trim();
       setError("");
-      props.addTask(trimedTitle);
+      props.addTask(trimedTitle, props.id);
       // props.changeFilter("active");
       setTaskTitle("");
     } else if (taskTitle.trim().length === 0) {
@@ -56,7 +56,7 @@ function ToDoList(props: PropsType) {
             <input
               type="checkbox"
               checked={t.checked}
-              onClick={() => props.changeStatus(t.id)}
+              onClick={() => props.changeStatus(t.id, props.id)}
             />
             <p className={t.checked === true ? "task-done" : ""}>{t.value}</p>
             <button onClick={() => props.removeTask(t.id, props.id)}>
