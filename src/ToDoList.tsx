@@ -3,10 +3,11 @@ import { FilterValues, TaskType } from "./App";
 import "./index.css";
 
 type PropsType = {
+  id: string;
   title: string;
   tasks: Array<TaskType>;
   removeTask: (id: string) => void;
-  changeFilter: (value: FilterValues) => void;
+  changeFilter: (value: FilterValues, listId: string) => void;
   filter: FilterValues;
   addTask: (title: string) => void;
   changeStatus: (id: string) => void;
@@ -25,7 +26,7 @@ function ToDoList(props: PropsType) {
       const trimedTitle = taskTitle.trim();
       setError("");
       props.addTask(trimedTitle);
-      props.changeFilter("active");
+      props.changeFilter("active", props.id);
       setTaskTitle("");
     } else if (taskTitle.trim().length === 0) {
       setError("пустое поле");
@@ -64,19 +65,19 @@ function ToDoList(props: PropsType) {
       </ul>
       <div className="btn-group">
         <button
-          onClick={() => props.changeFilter("all")}
+          onClick={() => props.changeFilter("all", props.id)}
           className={props.filter === "all" ? "btn-active" : ""}
         >
           All
         </button>
         <button
-          onClick={() => props.changeFilter("active")}
+          onClick={() => props.changeFilter("active", props.id)}
           className={props.filter === "active" ? "btn-active" : ""}
         >
           Active
         </button>
         <button
-          onClick={() => props.changeFilter("completed")}
+          onClick={() => props.changeFilter("completed", props.id)}
           className={props.filter === "completed" ? "btn-active" : ""}
         >
           Completed
