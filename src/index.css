@@ -14,16 +14,10 @@ code {
 
 .conteiner {
   display: flex;
-  gap: 20px;
-  /* justify-content: center; */
   flex-direction: column;
   /* justify-content: center; */
 
   max-width: 300px;
-}
-
-.main {
-  background-color: bisque;
 }
 
 .btn-active {
