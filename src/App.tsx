@@ -15,30 +15,47 @@ type TodoListType = {
 export type FilterValues = "all" | "active" | "completed";
 
 function App() {
+  let firstListId = v1();
+  let secondListId = v1();
   let [todoLists, setTodoLists] = useState<Array<TodoListType>>([
     {
-      id: v1(),
+      id: firstListId,
       title: "First List",
       filter: "completed",
     },
     {
-      id: v1(),
+      id: secondListId,
       title: "Second List",
       filter: "active",
     },
   ]);
-  const [tasks, setTasks] = useState([
-    { id: v1(), value: "CSS", checked: true },
-    { id: v1(), value: "JS", checked: true },
-    { id: v1(), value: "REACT", checked: false },
-    { id: v1(), value: "NODE JS", checked: false },
-  ]);
+  // const [tasks, setTasks] = useState([
+  //   { id: v1(), value: "CSS", checked: true },
+  //   { id: v1(), value: "JS", checked: true },
+  //   { id: v1(), value: "REACT", checked: false },
+  //   { id: v1(), value: "NODE JS", checked: false },
+  // ]);
 
-  const [filter, setFilter] = useState<FilterValues>("all");
+  const [allTasksObj, setAllTasksObj] = useState({
+    [firstListId]: [
+      { id: v1(), value: "CSS", checked: true },
+      { id: v1(), value: "JS", checked: true },
+      { id: v1(), value: "REACT", checked: false },
+      { id: v1(), value: "NODE JS", checked: false },
+    ],
+    [secondListId]: [
+      { id: v1(), value: "REACT", checked: false },
+      { id: v1(), value: "NODE JS", checked: false },
+    ],
+  });
 
-  function removeTask(id: string) {
-    let filteredTasks = tasks.filter((t) => t.id !== id);
-    setTasks(filteredTasks);
+  function removeTask(id: string, listId: string) {
+    let necessaryList = allTasksObj[listId];
+
+    let filteredTasks = necessaryList.filter((t) => t.id !== id);
+    console.log(filteredTasks);
+    allTasksObj[listId] = filteredTasks;
+    setAllTasksObj({ ...allTasksObj });
   }
 
   function changeFilter(value: FilterValues, listId: string) {
@@ -48,35 +65,42 @@ function App() {
     }
     setTodoLists([...todoLists]);
   }
-  let tasksForToDoList = tasks;
+  // let tasksForToDoList = tasks;
 
-  function addTask(title: string) {
+  function addTask(title: string, listId: string) {
     let newTask = {
       id: v1(),
       value: title,
       checked: false,
     };
-    tasksForToDoList = [newTask, ...tasks];
-    setTasks(tasksForToDoList);
+    let necessaryList = allTasksObj[listId];
+    allTasksObj[listId] = [newTask, ...necessaryList];
+    setAllTasksObj({ ...allTasksObj });
   }
 
-  function changeStatus(taskId: string) {
-    let resultTask = tasks.find((t) => t.id === taskId);
+  function changeStatus(taskId: string, listId: string) {
+    let necessaryList = allTasksObj[listId];
+    let resultTask = necessaryList.find((t) => t.id === taskId);
     if (resultTask) {
       resultTask.checked = !resultTask.checked;
     }
-    setTasks([...tasks]);
+    setAllTasksObj({ ...allTasksObj });
   }
 
   return (
     <>
       {todoLists.map((tl) => {
+        let tasksForToDoList = allTasksObj[tl.id]; // здесь остановился
         if (tl.filter === "active") {
-          tasksForToDoList = tasks.filter((t) => t.checked === false);
+          tasksForToDoList = tasksForToDoList.filter(
+            (t: any) => t.checked === false
+          );
         }
 
         if (tl.filter === "completed") {
-          tasksForToDoList = tasks.filter((t) => t.checked === true);
+          tasksForToDoList = tasksForToDoList.filter(
+            (t: any) => t.checked === true
+          );
         }
         return (
           <ToDoList
