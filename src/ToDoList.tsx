@@ -11,6 +11,7 @@ type PropsType = {
   filterValue: FilterValues;
   addTask: (title: string, listId: string) => void;
   changeStatus: (id: string, listId: string) => void;
+  deleteList: (listId: string) => void;
 };
 
 function ToDoList(props: PropsType) {
@@ -37,7 +38,10 @@ function ToDoList(props: PropsType) {
 
   return (
     <div className="conteiner">
-      <h2 className="title">{props.title}</h2>
+      <h2 className="title">
+        {props.title}
+        <button onClick={() => props.deleteList(props.id)}>delete list</button>
+      </h2>
 
       <div className="input">
         <input

@@ -57,7 +57,6 @@ function App() {
     }
   }
 
-  // let tasksForToDoList = tasks;
   function addTask(title: string, listId: string) {
     let newTask = {
       id: v1(),
@@ -76,6 +75,11 @@ function App() {
       resultTask.checked = !resultTask.checked;
     }
     setTasksObj({ ...tasksObj });
+  }
+
+  function deleteList(listId: string) {
+    let filteredArray = toDoLists.filter((tl) => tl.id !== listId);
+    setToDoLists(filteredArray);
   }
 
   return (
@@ -105,6 +109,7 @@ function App() {
             filterValue={tl.filterValue}
             addTask={addTask}
             changeStatus={changeStatus}
+            deleteList={deleteList}
           />
         );
       })}
