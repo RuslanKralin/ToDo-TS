@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { FilterValues, TaskType } from "./App";
 import "./index.css";
+import ItemForm from "./ItemForm";
 
 type PropsType = {
   id: string;
@@ -15,45 +16,17 @@ type PropsType = {
 };
 
 function ToDoList(props: PropsType) {
-  const [taskTitle, setTaskTitle] = useState("");
-  const [error, setError] = useState("");
-
-  function submitTaskTitle() {
-    if (
-      taskTitle &&
-      taskTitle.trim().length !== 0 &&
-      taskTitle.trim().length < 10
-    ) {
-      const trimedTitle = taskTitle.trim();
-      setError("");
-      props.addTask(trimedTitle, props.id);
-      // props.changeFilter("active");
-      setTaskTitle("");
-    } else if (taskTitle.trim().length === 0) {
-      setError("пустое поле");
-    } else if (taskTitle.trim().length > 5) {
-      setError("больше 10");
-    }
+  function addTask(title: string) {
+    props.addTask(title, props.id);
   }
-
   return (
     <div className="conteiner">
       <h2 className="title">
         {props.title}
         <button onClick={() => props.deleteList(props.id)}>delete list</button>
       </h2>
+      <ItemForm addItem={addTask} />
 
-      <div className="input">
-        <input
-          type="text"
-          onChange={(e) => setTaskTitle(e.target.value)}
-          value={taskTitle}
-          // onKeyDown={(e) => console.log(e.key)}
-          onKeyDown={(e) => (e.key === "Enter" ? submitTaskTitle() : null)}
-        />
-        <button onClick={() => submitTaskTitle()}>ADD</button>
-      </div>
-      {error && <div className="error">{error}</div>}
       <ul className="tasks-list">
         {props.tasks.map((t) => (
           <li className="task" key={t.id}>
