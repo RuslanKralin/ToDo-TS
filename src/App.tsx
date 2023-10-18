@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ToDoList from "./ToDoList";
 import { v1 } from "uuid";
 import ItemForm from "./ItemForm";
+import { Console } from "console";
 
 export type TaskType = {
   id: string;
@@ -104,6 +105,14 @@ function App() {
     });
   }
 
+  const changeListTitle = (id: string, newTitle: string) => {
+    let necessaryList = toDoLists.find((tl) => tl.id === id);
+    if (necessaryList) {
+      necessaryList.title = newTitle;
+      setToDoLists([...toDoLists]);
+    }
+  };
+
   return (
     <div className="conteiner">
       <ItemForm addItem={addTodoList} />
@@ -133,6 +142,7 @@ function App() {
             addTask={addTask}
             changeStatus={changeStatus}
             changeTaskTitle={changeTaskTitle}
+            changeListTitle={changeListTitle}
             deleteList={deleteList}
           />
         );

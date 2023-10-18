@@ -14,6 +14,7 @@ type PropsType = {
   addTask: (title: string, listId: string) => void;
   changeStatus: (id: string, listId: string) => void;
   changeTaskTitle: (id: string, newTitle: string, listId: string) => void;
+  changeListTitle: (id: string, newTitle: string) => void;
   deleteList: (listId: string) => void;
 };
 
@@ -21,10 +22,17 @@ function ToDoList(props: PropsType) {
   function addTask(title: string) {
     props.addTask(title, props.id);
   }
+  const changeTitleHandler = (newValue: string) =>
+    props.changeListTitle(props.id, newValue);
+
   return (
     <div className="conteiner">
       <h2 className="title">
-        {props.title}
+        <EditableSpan
+          title={props.title}
+          onChangeForParentTodoList={changeTitleHandler}
+        />
+
         <button onClick={() => props.deleteList(props.id)}>delete list</button>
       </h2>
       <ItemForm addItem={addTask} />
