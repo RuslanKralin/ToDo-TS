@@ -2,7 +2,6 @@ import React, { useState } from "react";
 
 export type ItemFormType = {
   addItem: (title: string) => void;
-  // id: string;
 };
 
 function ItemForm(props: ItemFormType) {
@@ -18,7 +17,7 @@ function ItemForm(props: ItemFormType) {
       const trimedTitle = taskTitle.trim();
       setError("");
       props.addItem(trimedTitle);
-      // props.changeFilter("active");
+
       setTaskTitle("");
     } else if (taskTitle.trim().length === 0) {
       setError("пустое поле");

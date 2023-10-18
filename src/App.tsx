@@ -78,6 +78,14 @@ function App() {
     setTasksObj({ ...tasksObj });
   }
 
+  function changeTaskTitle(taskId: string, newTitle: string, listId: string) {
+    let necessaryArray = tasksObj[listId];
+    let resultTask = necessaryArray.find((t: any) => t.id === taskId);
+    if (resultTask) {
+      resultTask.value = newTitle;
+    }
+    setTasksObj({ ...tasksObj });
+  }
   function deleteList(listId: string) {
     let filteredArray = toDoLists.filter((tl) => tl.id !== listId);
     setToDoLists(filteredArray);
@@ -124,6 +132,7 @@ function App() {
             filterValue={tl.filterValue}
             addTask={addTask}
             changeStatus={changeStatus}
+            changeTaskTitle={changeTaskTitle}
             deleteList={deleteList}
           />
         );
